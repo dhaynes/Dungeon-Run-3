@@ -1570,8 +1570,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   World: {fileID: 396381560}
   Canvas: {fileID: 1936945682}
-  HeroContainer: {fileID: 1453743911}
-  EnemyContainer: {fileID: 1675164354}
+  Hero: {fileID: 1837253626}
+  Enemy: {fileID: 1495924638}
 --- !u!1 &755922309
 GameObject:
   m_ObjectHideFlags: 0
@@ -1879,7 +1879,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: fc222b3792d744f44a93ed05c196e9f4, type: 2}
     - target: {fileID: 400004, guid: af19a99a7fcd94bb2b86130494f20449, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 89.98022
+      value: 89.98021
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: af19a99a7fcd94bb2b86130494f20449, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2016,6 +2016,18 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 5b1620be274e74e55bc81609e97c7516, type: 2}
+    - target: {fileID: 400000, guid: 5062f0845aadb44908d8eb5fc55edf28, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -89.98021
+      objectReference: {fileID: 0}
+    - target: {fileID: 400016, guid: 5062f0845aadb44908d8eb5fc55edf28, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -0.000013210373
+      objectReference: {fileID: 0}
+    - target: {fileID: 400028, guid: 5062f0845aadb44908d8eb5fc55edf28, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 89.9802
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5062f0845aadb44908d8eb5fc55edf28, type: 3}
 --- !u!1 &910145901
@@ -2352,7 +2364,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1453743912}
-  - component: {fileID: 1453743913}
   m_Layer: 0
   m_Name: HeroContainer
   m_TagString: Untagged
@@ -2375,20 +2386,6 @@ Transform:
   m_Father: {fileID: 396381561}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &1453743913
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1453743911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aa371ebe15f942c78fa20b303e0e027, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heroMesh: {fileID: 0}
-  animator: {fileID: 0}
 --- !u!1 &1495924636
 GameObject:
   m_ObjectHideFlags: 0
@@ -2437,6 +2434,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyMesh: {fileID: 1857119526}
   animator: {fileID: 1857119528}
+  Health: 100
 --- !u!54 &1495924639
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2489,14 +2487,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675164354}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.55, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1495924637}
   m_Father: {fileID: 396381561}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &1837253624
 GameObject:
   m_ObjectHideFlags: 0
@@ -2545,6 +2543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heroMesh: {fileID: 478448443}
   animator: {fileID: 478448444}
+  Health: 0
 --- !u!65 &1837253627
 BoxCollider:
   m_ObjectHideFlags: 0
