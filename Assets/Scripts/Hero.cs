@@ -62,6 +62,22 @@ public class Hero : Actor
 	public void Attack()
     {
         animator.SetTrigger("Attack");
+
+        if (IsUppercut())
+        {
+            //_rbody.AddForce(Vector3.up * jumpHeight);
+        }
+
+    }
+
+    private void DealEnemyDamage()
+    {
+        GameController.instance.enemyGroup.currentEnemy.TakeDamage(GameController.instance.hero.strength);
+    }
+
+    public bool IsUppercut()
+    {
+        return isDodging;
     }
 
     public void Jump()

@@ -21,6 +21,8 @@ public class ActionButton : MonoBehaviour
 
     [Space]
     public float ChargeSpeed = 1f;
+    public float cooldownBetweenClicks = 1f;
+    public bool coolingDown = false;
 
 
     private float _meterFillAmt;
@@ -48,7 +50,7 @@ public class ActionButton : MonoBehaviour
     public void TriggerAction()
     {
         bool tooSoon = false;
-        if (CurrentCharge < Cost) tooSoon = true;
+        if (CurrentCharge < Cost || coolingDown) tooSoon = true;
 
         if (!tooSoon) 
         {
@@ -65,6 +67,8 @@ public class ActionButton : MonoBehaviour
         }
 
     }
+
+
 
     private void InitiateSuccessfulAction()
     {
@@ -86,12 +90,22 @@ public class ActionButton : MonoBehaviour
                 DoAttack();
                 break;
         }
+
+        //apply cooldown
+        coolingDown = true;
+
+        Invoke("EndCooldown", cooldownBetweenClicks);
+    }
+
+    private void EndCooldown()
+    {
+        coolingDown = false;
     }
 
     private void DoAttack()
     {
         GameController.instance.hero.Attack();
-        GameController.instance.enemyGroup.currentEnemy.TakeDamage(GameController.instance.hero.strength);
+        ;
     }
 
     private void DoJump()

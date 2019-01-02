@@ -4865,12 +4865,15 @@ MonoBehaviour:
   animator: {fileID: 3993457985683652642}
   bloodFX: {fileID: 536796021349630752}
   healthMeter: {fileID: 0}
+  invincible: 0
   startingHealth: 100
   currentHealth: 0
   strength: 25
   attackAnticipationDuration: 1
-  attackPercentage: 0.5
-  blockPercentage: 0.5
+  attackPercentage: 0.2
+  blockPercentage: 0.35
+  blockCooldown: 0
+  maxBlockCooldown: 1.6
 --- !u!65 &536796022018279368
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4900,6 +4903,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 106
   m_CollisionDetection: 0
+--- !u!114 &5248501271137516067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3993457985690956768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba45b2b9847834fe39c1a6492c1a2a94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3993457985691055426
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,7 +12,12 @@ public class Enemy : Actor
     public float attackPercentage = 0.5f;
 
     [Tooltip("Cool tooltip, bro. Percent likelihood that an attack will put the enemy into block mode.")]
-    public float blockPercentage = 0.5f;
+    public float blockPercentage = 0.1f;
+
+    [Tooltip("Timer that shows how long until the enemy will open itself up to attack again.")]
+    public float blockCooldown = 0f;
+    public float maxBlockCooldown = 0f;
+
 
 
     public bool isAttacking
@@ -34,7 +39,6 @@ public class Enemy : Actor
     }
 
 
-
     private Rigidbody _rbody;
     private Hero _hero;
 
@@ -45,7 +49,17 @@ public class Enemy : Actor
         _hero = GameController.instance.hero;
     }
 
-	public void Reset()
+    void Update()
+    {
+        blockCooldown -= Time.deltaTime;
+        if (blockCooldown < 0)
+        {
+            blockCooldown = 0;
+            EndBlock();
+        }
+    }
+
+    public void Reset()
 	{
         healthMeter = GameController.instance.enemyHealthMeter;
         healthMeter.meter.value = 1;
@@ -70,13 +84,17 @@ public class Enemy : Actor
         if (animator.GetBool("isAttacking")) return;
 
         //evaluate whether or not this should trigger a block. Once an enemy blocks, it will continue blocking until it attacks again.
-        if (CheckIfBlocked())
+        if (AttackBlocked())
         {
             animator.SetTrigger("Block");
             isBlocking = true;
 
             //show the text effect
             GameController.instance.damageTextEffect.ShowTextEffect("Blocked!", textEffectSpawnLocation);
+
+            isBlocking = true;
+            BeginBlock();
+
             return;
         }
 
@@ -103,15 +121,39 @@ public class Enemy : Actor
 
     }
 
-    public bool CheckIfBlocked()
+    public bool AttackBlocked()
     {
-        bool block = false;
+        bool attackBlocked = false;
 
-        //RNG to see if the enemy will block
-        if (Random.value >= blockPercentage || isBlocking == true) block = true;
+        if (blockCooldown > 0f)
+        {
+            attackBlocked = true;
+        }
+        else if (isBlocking)
+        {
+            attackBlocked = true;
+        }
+        else if (Random.value <= blockPercentage)
+        {
+            attackBlocked = true;
+        }
+        else
+        {
+            attackBlocked = false;
+        }
 
-        return block;
+        return attackBlocked;
     }
+    public void BeginBlock()
+    {
+        blockCooldown = maxBlockCooldown;
+    }
+
+    public void EndBlock()
+    {
+        isBlocking = false;
+    }
+
 
     public void Die()
     {
@@ -126,6 +168,14 @@ public class Enemy : Actor
     {
         GameController.instance.enemyGroup.NextEnemy();
         gameObject.SetActive(false);
+    }
+
+    public void TryToAttack()
+    {
+        if (Random.value <= attackPercentage)
+        {
+            PrepareToAttack();
+        }
     }
 
     private void PrepareToAttack()
@@ -143,12 +193,15 @@ public class Enemy : Actor
 
     }
 
+
+
     private void EvaluateAttackSuccess()
     {
         _hero.TakeDamage(strength);
+        MarkAttackComplete();
     }
 
-    //this is called from a state machine behaviour attacked to the animator's attack state
+    //this is called from an anim event
     public void MarkAttackComplete()
     {
         isAttacking = false;
