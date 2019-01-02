@@ -7,6 +7,7 @@ public class UIScreenManager : MonoBehaviour
     [Header("Game Screens")]
     public GameObject StartScreen;
     public GameObject GameScreen;
+    public GameObject GameOverScreen;
 
 
     void HideAll()

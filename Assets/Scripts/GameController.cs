@@ -11,8 +11,14 @@ public class GameController : MonoBehaviour
     public UIScreenManager Canvas;
 
     [Space(15)]
-    public Hero Hero;
-    public Enemy Enemy;
+    public Hero hero;
+
+    [Space(15)]
+    public EnemyGroup enemyGroup;
+    public HealthMeter enemyHealthMeter;
+
+    [Space(15)]
+    public StatusEffectTextContainer damageTextEffect;
 
     public static GameController instance
     {
@@ -30,6 +36,18 @@ public class GameController : MonoBehaviour
     void Start()
     {
         Canvas.ShowScreen(Canvas.StartScreen);
+    }
+
+    public void StartGame()
+    {
+        Canvas.ShowScreen(Canvas.GameScreen);
+        hero.MakeEntrance();
+        enemyGroup.InitializeEnemyGroup();
+    }
+
+    public void GameOver()
+    {
+        Canvas.ShowScreen(Canvas.GameOverScreen);
     }
 
     // Update is called once per frame

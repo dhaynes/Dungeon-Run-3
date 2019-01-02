@@ -12,24 +12,29 @@ public class ActionButton : MonoBehaviour
     [Space]
     public TextMeshProUGUI Label;
     public Slider Meter;
+    public StaminaMeter staminaMeter;
 
     [Space]
     public float MaxCharge;
     public float CurrentCharge;
     public float Cost;
 
+    [Space]
+    public float ChargeSpeed = 1f;
+
+
     private float _meterFillAmt;
 
     // Start is called before the first frame update
     void Start()
     {
-
+      
     }
 
     // Update is called once per frame
     void Update()
     {
-        CurrentCharge += Time.deltaTime * 10;
+        CurrentCharge += (Time.deltaTime * Cost) * ChargeSpeed;
 
         if (CurrentCharge > MaxCharge)
         {
@@ -45,21 +50,58 @@ public class ActionButton : MonoBehaviour
         bool tooSoon = false;
         if (CurrentCharge < Cost) tooSoon = true;
 
-        CurrentCharge -= Cost;
+        if (!tooSoon) 
+        {
+            //Debug.Log("Success!");
 
-        if (CurrentCharge < 0) CurrentCharge = 0;
+            CurrentCharge -= Cost;
+            if (CurrentCharge < 0) CurrentCharge = 0;
 
-        if (!tooSoon) Debug.Log("Success!"); else Debug.Log("Fail!");
-
-        GameController.instance.Hero.Attack();
-
-        GameController.instance.Enemy.TakeDamage(50);
+            InitiateSuccessfulAction();
+        }
+        else 
+        {
+            //Debug.Log("Fail!");
+        }
 
     }
 
-    private void HandlePointerDown()
+    private void InitiateSuccessfulAction()
     {
-        Debug.Log("Pointer is down!");
+        switch (actionType)
+        {
+            case ActionType.Jump:
+                DoJump();
+                break;
+
+            case ActionType.Dodge:
+                DoDodge();
+                break;
+
+            case ActionType.Magic:
+                DoAttack();
+                break;
+
+            default: //"Attack"
+                DoAttack();
+                break;
+        }
+    }
+
+    private void DoAttack()
+    {
+        GameController.instance.hero.Attack();
+        GameController.instance.enemyGroup.currentEnemy.TakeDamage(GameController.instance.hero.strength);
+    }
+
+    private void DoJump()
+    {
+        GameController.instance.hero.Jump();
+    }
+
+    private void DoDodge()
+    {
+        GameController.instance.hero.Dodge();
     }
 
     private void OnValidate()
