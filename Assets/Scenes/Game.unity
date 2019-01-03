@@ -961,6 +961,7 @@ MonoBehaviour:
   meter: {fileID: 268511047}
   maxStamina: 100
   stamina: 0
+  chargeSpeed: 22
 --- !u!1 &282228749
 GameObject:
   m_ObjectHideFlags: 0
@@ -6565,7 +6566,7 @@ MonoBehaviour:
   hero: {fileID: 1837253626}
   enemyGroup: {fileID: 282228751}
   enemyHealthMeter: {fileID: 1163234757}
-  staminaMeter: {fileID: 0}
+  staminaMeter: {fileID: 268511048}
   damageTextEffect: {fileID: 3860746743103463912}
   smackFX: {fileID: 1737657534}
 --- !u!1 &752372954
@@ -13982,6 +13983,11 @@ PrefabInstance:
       propertyPath: staminaMeter
       value: 
       objectReference: {fileID: 268511048}
+    - target: {fileID: 1791207365189987580, guid: 24689d22886d24045be611551f4d5856,
+        type: 3}
+      propertyPath: Cost
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 5034114168806075192, guid: 24689d22886d24045be611551f4d5856,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -14007,6 +14013,11 @@ PrefabInstance:
       propertyPath: staminaMeter
       value: 
       objectReference: {fileID: 268511048}
+    - target: {fileID: 1791207365424270363, guid: 24689d22886d24045be611551f4d5856,
+        type: 3}
+      propertyPath: Cost
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1791207365953186443, guid: 24689d22886d24045be611551f4d5856,
         type: 3}
       propertyPath: staminaMeter
@@ -14017,6 +14028,11 @@ PrefabInstance:
       propertyPath: staminaMeter
       value: 
       objectReference: {fileID: 268511048}
+    - target: {fileID: 4954770109917884274, guid: 24689d22886d24045be611551f4d5856,
+        type: 3}
+      propertyPath: Cost
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24689d22886d24045be611551f4d5856, type: 3}
 --- !u!1001 &5210798945739769266
@@ -14178,11 +14194,6 @@ PrefabInstance:
       propertyPath: healthMeter
       value: 
       objectReference: {fileID: 1285526221}
-    - target: {fileID: 6906998775717276851, guid: 1cf5305e08cf64255bdb82bfff0c8cad,
-        type: 3}
-      propertyPath: invincible
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1cf5305e08cf64255bdb82bfff0c8cad, type: 3}
 --- !u!1001 &8805014396034314546

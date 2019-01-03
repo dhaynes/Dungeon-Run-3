@@ -550,7 +550,7 @@ MonoBehaviour:
   staminaMeter: {fileID: 0}
   MaxCharge: 1
   CurrentCharge: 0
-  Cost: 1
+  Cost: 5
   ChargeSpeed: 100
   cooldownBetweenClicks: 0.2
   coolingDown: 0
@@ -901,7 +901,7 @@ MonoBehaviour:
   staminaMeter: {fileID: 0}
   MaxCharge: 1
   CurrentCharge: 0
-  Cost: 1
+  Cost: 5
   ChargeSpeed: 100
   cooldownBetweenClicks: 0.2
   coolingDown: 0
@@ -1677,7 +1677,7 @@ MonoBehaviour:
   staminaMeter: {fileID: 0}
   MaxCharge: 1
   CurrentCharge: 0
-  Cost: 1
+  Cost: 5
   ChargeSpeed: 100
   cooldownBetweenClicks: 0.2
   coolingDown: 0

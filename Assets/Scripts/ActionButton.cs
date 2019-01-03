@@ -36,35 +36,17 @@ public class ActionButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CurrentCharge += (Time.deltaTime * Cost) * ChargeSpeed;
-
-        if (CurrentCharge > MaxCharge)
-        {
-            CurrentCharge = MaxCharge;
-        }
-
-        Meter.value = CurrentCharge / MaxCharge;
 
     }
 
     public void TriggerAction()
     {
-        bool tooSoon = false;
-        if (CurrentCharge < Cost || coolingDown) tooSoon = true;
+        if (coolingDown) return;
+        if (GameController.instance.staminaMeter.stamina <= Cost) return;
 
-        if (!tooSoon) 
-        {
+        GameController.instance.staminaMeter.stamina -= Cost;
 
-            CurrentCharge -= Cost;
-            if (CurrentCharge < 0) CurrentCharge = 0;
-
-            GameController.instance.staminaMeter.stamina -= Cost;
-
-            InitiateSuccessfulAction();
-        }
-        else 
-        {
-        }
+        InitiateSuccessfulAction();
 
     }
 
@@ -105,7 +87,6 @@ public class ActionButton : MonoBehaviour
     private void DoAttack()
     {
         GameController.instance.hero.Attack();
-        ;
     }
 
     private void DoJump()
