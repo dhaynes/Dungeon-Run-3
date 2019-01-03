@@ -16,9 +16,11 @@ public class GameController : MonoBehaviour
     [Space(15)]
     public EnemyGroup enemyGroup;
     public HealthMeter enemyHealthMeter;
+    public StaminaMeter staminaMeter;
 
     [Space(15)]
     public StatusEffectTextContainer damageTextEffect;
+    public ParticleSystem smackFX;
 
     public static GameController instance
     {

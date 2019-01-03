@@ -18,7 +18,7 @@ public class Enemy : Actor
     public float blockCooldown = 0f;
     public float maxBlockCooldown = 0f;
 
-
+    public GameObject shield;
 
     public bool isAttacking
     {
@@ -35,9 +35,8 @@ public class Enemy : Actor
     public bool isBlocking
     {
         get { return animator.GetBool("isBlocking"); }
-        private set { animator.SetBool("isBlocking", value); }
+        private set { animator.SetBool("isBlocking", value); shield.SetActive(value); }
     }
-
 
     private Rigidbody _rbody;
     private Hero _hero;
@@ -51,12 +50,16 @@ public class Enemy : Actor
 
     void Update()
     {
-        blockCooldown -= Time.deltaTime;
-        if (blockCooldown < 0)
+        if (isBlocking)
         {
-            blockCooldown = 0;
-            EndBlock();
+            blockCooldown -= Time.deltaTime;
+            if (blockCooldown < 0)
+            {
+                blockCooldown = 0;
+                BlockCooldownEnded();
+            }
         }
+
     }
 
     public void Reset()
@@ -75,10 +78,14 @@ public class Enemy : Actor
         healthMeter.Show();
 
         animator.SetTrigger("Enter");
+
+        //clear the dodge and attacking flags
+        ClearFlags();
     }
 
     public void TakeDamage(float damageAmt)
     {
+
         if (invincible) return;
         if (animator.GetBool("isDead")) return;
         if (animator.GetBool("isAttacking")) return;
@@ -90,9 +97,8 @@ public class Enemy : Actor
             isBlocking = true;
 
             //show the text effect
-            GameController.instance.damageTextEffect.ShowTextEffect("Blocked!", textEffectSpawnLocation);
+            GameController.instance.damageTextEffect.ShowTextEffect("Blocked!", middleOfCollider);
 
-            isBlocking = true;
             BeginBlock();
 
             return;
@@ -114,32 +120,32 @@ public class Enemy : Actor
 
             animator.SetTrigger("TakeDamage");
 
-            GameController.instance.damageTextEffect.ShowTextEffect("-" + damageAmt, textEffectSpawnLocation);
+            GameController.instance.damageTextEffect.ShowTextEffect("-" + damageAmt, middleOfCollider);
         }
 
         bloodFX.Play();
+        ShowSmackEffect();
+    }
 
+    private void ShowSmackEffect()
+    {
+        //smack location
+        Vector3 smackLocation = middleOfCollider;
+        //offset it up to the upper left corner of the collider, and
+        smackLocation.x -= 0.6f;
+        smackLocation.y += 0.6f;
+        smackLocation.z = GameController.instance.smackFX.transform.parent.position.z;
+        GameController.instance.smackFX.transform.position = smackLocation;
+        GameController.instance.smackFX.Play();
     }
 
     public bool AttackBlocked()
     {
         bool attackBlocked = false;
 
-        if (blockCooldown > 0f)
+        if (isBlocking || Random.value <= blockPercentage)
         {
             attackBlocked = true;
-        }
-        else if (isBlocking)
-        {
-            attackBlocked = true;
-        }
-        else if (Random.value <= blockPercentage)
-        {
-            attackBlocked = true;
-        }
-        else
-        {
-            attackBlocked = false;
         }
 
         return attackBlocked;
@@ -147,11 +153,15 @@ public class Enemy : Actor
     public void BeginBlock()
     {
         blockCooldown = maxBlockCooldown;
+        //block cooldown is decremented in the Update loop
     }
 
-    public void EndBlock()
+    public void BlockCooldownEnded()
     {
         isBlocking = false;
+
+        //every time a block ends, attack.
+        PrepareToAttack();
     }
 
 
@@ -170,6 +180,7 @@ public class Enemy : Actor
         gameObject.SetActive(false);
     }
 
+    //this is called from an anim event on the enemy controller's idle
     public void TryToAttack()
     {
         if (Random.value <= attackPercentage)
@@ -198,11 +209,11 @@ public class Enemy : Actor
     private void EvaluateAttackSuccess()
     {
         _hero.TakeDamage(strength);
-        MarkAttackComplete();
+        ClearFlags();
     }
 
     //this is called from an anim event
-    public void MarkAttackComplete()
+    public void ClearFlags()
     {
         isAttacking = false;
         isBlocking = false;

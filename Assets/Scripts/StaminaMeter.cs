@@ -7,25 +7,25 @@ public class StaminaMeter : MonoBehaviour
 {
     public Slider meter;
     public float maxStamina = 100f;
-    public float currentStamina;
+    public float stamina = 0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentStamina = 5f;
+        stamina = 5f;
         UpdateMeter();
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentStamina += Time.deltaTime * 10f;
+        stamina += Time.deltaTime * 10f;
 
         UpdateMeter();
     }
 
     private void UpdateMeter()
     {
-        meter.value = currentStamina / maxStamina;
+        meter.value = stamina / maxStamina;
     }
 }

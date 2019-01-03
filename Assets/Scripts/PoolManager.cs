@@ -72,6 +72,7 @@ public class PoolManager : MonoBehaviour {
 	}
 
 
+
 	public class ObjectInstance
 	{
 		GameObject gameObject;
@@ -97,6 +98,7 @@ public class PoolManager : MonoBehaviour {
             {
                 Debug.Log("PoolManager: Object does not have PoolObject script attached");
             }
+ 
 		}
 
 		public void Reuse(Vector3 position, Quaternion rotation)
@@ -125,7 +127,7 @@ public class PoolManager : MonoBehaviour {
 			}
 		}
 
-		public void SetParent(Transform parent)
+        public void SetParent(Transform parent)
 		{
 			transform.SetParent(parent);
 		}

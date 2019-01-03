@@ -15,7 +15,7 @@ public class Actor : MonoBehaviour
     public float currentHealth;
     public float strength = 10;
 
-    public Vector3 textEffectSpawnLocation
+    public Vector3 middleOfCollider
     {
         get
         {

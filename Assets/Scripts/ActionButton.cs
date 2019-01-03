@@ -21,7 +21,7 @@ public class ActionButton : MonoBehaviour
 
     [Space]
     public float ChargeSpeed = 1f;
-    public float cooldownBetweenClicks = 1f;
+    public float cooldownBetweenClicks = 0.5f;
     public bool coolingDown = false;
 
 
@@ -54,16 +54,16 @@ public class ActionButton : MonoBehaviour
 
         if (!tooSoon) 
         {
-            //Debug.Log("Success!");
 
             CurrentCharge -= Cost;
             if (CurrentCharge < 0) CurrentCharge = 0;
+
+            GameController.instance.staminaMeter.stamina -= Cost;
 
             InitiateSuccessfulAction();
         }
         else 
         {
-            //Debug.Log("Fail!");
         }
 
     }

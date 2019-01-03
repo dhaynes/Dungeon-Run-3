@@ -8,7 +8,7 @@ public class StatusEffectTextObject : PoolObject {
 	
 	void Awake () 
 	{
-        textMeshPro.text = "";
+        if (textMeshPro) textMeshPro.text = "";
 	}
 	
 	public override void OnObjectReuse()

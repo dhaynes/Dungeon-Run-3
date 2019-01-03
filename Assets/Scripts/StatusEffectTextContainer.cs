@@ -15,4 +15,5 @@ public class StatusEffectTextContainer : MonoBehaviour {
 		Quaternion rotation = prefab.transform.rotation;
 		PoolManager.instance.ReuseStatusEffectTextObject(prefab, text, position, rotation);
 	}
+
 }

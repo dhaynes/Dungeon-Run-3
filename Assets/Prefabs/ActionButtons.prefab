@@ -552,7 +552,7 @@ MonoBehaviour:
   CurrentCharge: 0
   Cost: 1
   ChargeSpeed: 100
-  cooldownBetweenClicks: 0.25
+  cooldownBetweenClicks: 0.2
   coolingDown: 0
 --- !u!114 &3094972821141047474
 MonoBehaviour:
@@ -903,7 +903,7 @@ MonoBehaviour:
   CurrentCharge: 0
   Cost: 1
   ChargeSpeed: 100
-  cooldownBetweenClicks: 0.25
+  cooldownBetweenClicks: 0.2
   coolingDown: 0
 --- !u!114 &3094972821105993813
 MonoBehaviour:
@@ -1679,7 +1679,7 @@ MonoBehaviour:
   CurrentCharge: 0
   Cost: 1
   ChargeSpeed: 100
-  cooldownBetweenClicks: 0.25
+  cooldownBetweenClicks: 0.2
   coolingDown: 0
 --- !u!114 &8568883136514968380
 MonoBehaviour:

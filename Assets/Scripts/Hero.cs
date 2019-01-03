@@ -124,7 +124,7 @@ public class Hero : Actor
             }
 
             //show the damage text effect
-            GameController.instance.damageTextEffect.ShowTextEffect("-" + val, textEffectSpawnLocation);
+            GameController.instance.damageTextEffect.ShowTextEffect("-" + val, middleOfCollider);
 
             //update the meter to new health value
             float newHealthValue = currentHealth / startingHealth;
