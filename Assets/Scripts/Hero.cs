@@ -7,67 +7,48 @@ public class Hero : Actor
     [Space(15)]
     public int jumpHeight = 740;
 
-    private Rigidbody _rbody;
-
-    public bool isDodging
-    { 
-        get => animator.GetBool("isDodging");
-        set => animator.SetBool("isDodging", value); 
-    }
-
-    public bool isJumping
-    {
-        get => animator.GetBool("isJumping");
-        set => animator.SetBool("isJumping", value);
-    }
-
-
-
-    private void Awake()
-    {
-        _rbody = this.GetComponent<Rigidbody>();
-        animator = mesh.GetComponent<Animator>();
-    }
-
     void Start()
 	{
-        _rbody.sleepThreshold = 0;
-
-        Reset();
+        healthMeter = GameController.instance.playerHealthMeter;
 	}
 
-    public void Reset()
+    void Update()
     {
-        mesh.SetActive(false);
+        float realignmentSpeed = 0.01f;
+        float ease = 0.1f;
 
-        healthMeter.meter.value = 1;
-        
-        //reset stats
-        currentHealth = startingHealth;
-        isDodging = false;
-        animator.SetBool("isJumping", false);
-        animator.Play("Hidden", -1, 0f);
-    }
+        Vector3 pos = transform.localPosition;
+        float distance = Vector3.Distance(pos, Vector3.zero);
 
-    public void MakeEntrance()
-	{
-        mesh.SetActive(true);
-        animator.SetTrigger("Enter");
-        healthMeter.Show();
-
-        //do this so that the rigidbody responds to ground collision.
-        _rbody.WakeUp();
-    }
-
-	public void Attack()
-    {
-        animator.SetTrigger("Attack");
-
-        if (IsUppercut())
+        if (pos.z < -realignmentSpeed) //if it has been pushed forwards...
         {
-            //_rbody.AddForce(Vector3.up * jumpHeight);
-        }
 
+            pos.z += distance * ease;
+           
+        }
+        else if (pos.z > realignmentSpeed) //if it's towards the back...
+        {
+           
+            pos.z -= realignmentSpeed;
+
+        }
+        else if (pos.z >= -realignmentSpeed && pos.z <= realignmentSpeed)
+        {
+            pos.z = 0;
+        }
+        transform.localPosition = pos;
+
+    }
+
+    public void Attack()
+    {
+        //animator.SetTrigger("Attack");
+        //transform.localPosition.Set(transform.localPosition.x, transform.localPosition.y, 0f);
+        Vector3 attackStartPos = transform.localPosition;
+        attackStartPos.z = 0;
+        transform.localPosition = attackStartPos;
+        rbody.AddForce(-transform.forward * 2000f);
+        isDodging = false;
     }
 
     private void DealEnemyDamage()
@@ -85,19 +66,16 @@ public class Hero : Actor
         animator.SetTrigger("Jump");
         isJumping = true;
 
-        _rbody.velocity = Vector3.zero;
-        _rbody.AddForce(Vector3.up * jumpHeight);
-    }
-
-    public void Float()
-    {
-        _rbody.AddForce(Vector3.up * 200);
+        rbody.velocity = Vector3.zero;
+        rbody.AddForce(Vector3.up * jumpHeight);
     }
 
     public void Dodge()
     {
-        animator.SetTrigger("Dodge");
+        //animator.SetTrigger("Dodge");
         isDodging = true;
+
+        rbody.AddForce(transform.forward * 1000f);
     }
 
     public void MarkDodgeComplete()
@@ -140,12 +118,12 @@ public class Hero : Actor
         animator.SetTrigger("Die");
     }
 
+    //handle collision w/ the ground.
 	private void OnCollisionEnter(Collision collision)
 	{
         if (collision.gameObject.tag == "Ground")
         {
-            //Debug.Log("Ground!");
-            animator.SetBool("isJumping", false);
+            animator.SetTrigger("LandOnGround");
             isJumping = false;
         }
 	}

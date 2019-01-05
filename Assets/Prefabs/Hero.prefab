@@ -4865,10 +4865,16 @@ MonoBehaviour:
   animator: {fileID: 6906998776419635161}
   bloodFX: {fileID: 2143378152660363334}
   healthMeter: {fileID: 0}
+  rbody: {fileID: 6906998775717276853}
   invincible: 0
-  startingHealth: 100
+  startingHealth: 1000
   currentHealth: 0
   strength: 10
+  isAttacking: 0
+  isDead: 0
+  isBlocking: 0
+  isDodging: 0
+  isJumping: 0
   jumpHeight: 740
 --- !u!54 &6906998775717276853
 Rigidbody:
@@ -4982,6 +4988,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: fc222b3792d744f44a93ed05c196e9f4, type: 2}
+    - target: {fileID: 9500000, guid: af19a99a7fcd94bb2b86130494f20449, type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af19a99a7fcd94bb2b86130494f20449, type: 3}
 --- !u!1 &6906998776412355603 stripped

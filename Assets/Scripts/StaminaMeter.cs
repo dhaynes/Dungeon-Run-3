@@ -21,6 +21,7 @@ public class StaminaMeter : MonoBehaviour
     void Update()
     {
         stamina += Time.deltaTime * chargeSpeed;
+        if (stamina > maxStamina) stamina = maxStamina;
 
         UpdateMeter();
     }

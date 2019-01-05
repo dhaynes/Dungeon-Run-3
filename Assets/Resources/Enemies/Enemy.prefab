@@ -4878,10 +4878,16 @@ MonoBehaviour:
   animator: {fileID: 536796021693905169}
   bloodFX: {fileID: 536796021349630752}
   healthMeter: {fileID: 0}
+  rbody: {fileID: 536796022018279415}
   invincible: 0
   startingHealth: 100
   currentHealth: 0
   strength: 25
+  isAttacking: 0
+  isDead: 0
+  isBlocking: 0
+  isDodging: 0
+  isJumping: 0
   attackAnticipationDuration: 1
   attackPercentage: 0.2
   blockPercentage: 0.1

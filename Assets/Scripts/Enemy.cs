@@ -20,25 +20,6 @@ public class Enemy : Actor
 
     public GameObject shield;
 
-    public bool isAttacking
-    {
-        get { return animator.GetBool("isAttacking"); }
-        private set { animator.SetBool("isAttacking", value); }
-    }
-
-    public bool isDead
-    {
-        get { return animator.GetBool("isDead"); }
-        private set { animator.SetBool("isDead", value); }
-    }
-
-    public bool isBlocking
-    {
-        get { return animator.GetBool("isBlocking"); }
-        private set { animator.SetBool("isBlocking", value); shield.SetActive(value); }
-    }
-
-    private Rigidbody _rbody;
     private Hero _hero;
 
     void Start()
@@ -46,6 +27,7 @@ public class Enemy : Actor
         //attach anim helper script to mesh
         mesh.AddComponent<AnimEventHelper>();
         _hero = GameController.instance.hero;
+
     }
 
     void Update()
@@ -60,27 +42,6 @@ public class Enemy : Actor
             }
         }
 
-    }
-
-    public void Reset()
-	{
-        healthMeter = GameController.instance.enemyHealthMeter;
-        healthMeter.meter.value = 1;
-        currentHealth = startingHealth;
-
-        _rbody = this.gameObject.GetComponent<Rigidbody>();
-        _rbody.sleepThreshold = 0;
-    }
-
-    public void MakeEntrance()
-    {
-        _rbody.WakeUp();
-        healthMeter.Show();
-
-        animator.SetTrigger("Enter");
-
-        //clear the dodge and attacking flags
-        ClearFlags();
     }
 
     public void TakeDamage(float damageAmt)
@@ -180,13 +141,14 @@ public class Enemy : Actor
         gameObject.SetActive(false);
     }
 
+    //Make an attempt to initiate an attack.
     //this is called from an anim event on the enemy controller's idle
     public void TryToAttack()
     {
-        if (Random.value <= attackPercentage)
-        {
-            PrepareToAttack();
-        }
+        //if (Random.value <= attackPercentage)
+        //{
+        //    PrepareToAttack();
+        //}
     }
 
     private void PrepareToAttack()

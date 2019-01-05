@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     [Space(15)]
     public EnemyGroup enemyGroup;
     public HealthMeter enemyHealthMeter;
+    public HealthMeter playerHealthMeter;
     public StaminaMeter staminaMeter;
 
     [Space(15)]
