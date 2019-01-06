@@ -69,12 +69,12 @@ public class EnemyGroup : MonoBehaviour
         }
 
         //grab the next enemy, and initialize it.
-        Enemy currentEnemy = enemiesLoaded[currentEnemyIndex];
-        currentEnemy.healthMeter = GameController.instance.enemyHealthMeter;
-        currentEnemy.gameObject.SetActive(true);
-        currentEnemy.MakeEntrance();
+        Enemy newEnemy = enemiesLoaded[currentEnemyIndex];
+        newEnemy.healthMeter = GameController.instance.enemyHealthMeter;
+        newEnemy.gameObject.SetActive(true);
+        newEnemy.MakeEntrance();
 
-        this.currentEnemy = currentEnemy;
+        this.currentEnemy = newEnemy;
     }
 
     private void EnemyGroupDefeated()

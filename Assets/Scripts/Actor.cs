@@ -16,6 +16,7 @@ public class Actor : MonoBehaviour
     public float currentHealth;
     public float strength = 10;
 
+    [Space(15)]
     public bool isAttacking;
     public bool isDead;
     public bool isBlocking;
@@ -61,6 +62,8 @@ public class Actor : MonoBehaviour
         isDodging = false;
         isJumping = false;
     }
+
+
 
     public Vector3 middleOfCollider
     {
