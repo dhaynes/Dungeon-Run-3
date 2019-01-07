@@ -8,7 +8,7 @@ public class Hero : Actor
     public int jumpHeight = 740;
     public float forwardAttackForce = 650f;
     public BoxCollider attackCollider;
-    //public float attackCooldown = 1f;
+
 
     void Start()
 	{
@@ -35,19 +35,18 @@ public class Hero : Actor
             transform.localPosition = attackStartPos;
         }
 
-
         isDodging = false;
 
     }
 
     private void UpdateAttackCooldown()
     {
-        //if (attackCooldown <= 0)
+        //if (_attackCooldown <= 0)
         //{
-        //    attackCooldown = 0;
+        //    _attackCooldown = 0;
         //    return;
         //}
-        //attackCooldown -= Time.deltaTime;
+        //_attackCooldown -= Time.deltaTime;
 
 
     }

@@ -21,7 +21,6 @@ public class GameController : MonoBehaviour
 
     [Space(15)]
     public StatusEffectTextContainer damageTextEffect;
-    public ParticleSystem smackFX;
 
     [Space(15)]
     public ActionButton attackButton;
@@ -38,6 +37,11 @@ public class GameController : MonoBehaviour
             }
             return _instance;
         }
+    }
+
+    private void Awake()
+    {
+        Application.targetFrameRate = 60;
     }
 
     // Start is called before the first frame update

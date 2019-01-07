@@ -135,20 +135,8 @@ public class Enemy : Actor
         }
 
         bloodFX.Play();
-        ShowSmackEffect();
     }
 
-    private void ShowSmackEffect()
-    {
-        //smack location
-        Vector3 smackLocation = middleOfCollider;
-        //offset it up to the upper left corner of the collider, and
-        smackLocation.x -= 0.6f;
-        smackLocation.y += 0.6f;
-        smackLocation.z = GameController.instance.smackFX.transform.parent.position.z;
-        GameController.instance.smackFX.transform.position = smackLocation;
-        GameController.instance.smackFX.Play();
-    }
 
     public bool AttackBlocked()
     {
