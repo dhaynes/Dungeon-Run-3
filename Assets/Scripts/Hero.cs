@@ -6,72 +6,55 @@ public class Hero : Actor
 {
     [Space(15)]
     public int jumpHeight = 740;
-
-    private Rigidbody _rbody;
-
-    public bool isDodging
-    { 
-        get => animator.GetBool("isDodging");
-        set => animator.SetBool("isDodging", value); 
-    }
-
-    public bool isJumping
-    {
-        get => animator.GetBool("isJumping");
-        set => animator.SetBool("isJumping", value);
-    }
-
-
-
-    private void Awake()
-    {
-        _rbody = this.GetComponent<Rigidbody>();
-        animator = mesh.GetComponent<Animator>();
-    }
+    public float forwardAttackForce = 650f;
+    public BoxCollider attackCollider;
+    //public float attackCooldown = 1f;
 
     void Start()
 	{
-        _rbody.sleepThreshold = 0;
-
-        Reset();
-	}
-
-    public void Reset()
-    {
-        mesh.SetActive(false);
-
-        healthMeter.meter.value = 1;
-        
-        //reset stats
-        currentHealth = startingHealth;
-        isDodging = false;
-        animator.SetBool("isJumping", false);
-        animator.Play("Hidden", -1, 0f);
+        healthMeter = GameController.instance.playerHealthMeter;
+        attackCollider.gameObject.GetComponent<MeshRenderer>().enabled = false;
     }
 
-    public void MakeEntrance()
-	{
-        mesh.SetActive(true);
-        animator.SetTrigger("Enter");
-        healthMeter.Show();
-
-        //do this so that the rigidbody responds to ground collision.
-        _rbody.WakeUp();
+    void Update()
+    {
+        UpdateAttackCooldown();
     }
 
-	public void Attack()
+    public void Attack()
     {
+        //enable the attack collider
+        attackCollider.enabled = true;
+
         animator.SetTrigger("Attack");
 
-        if (IsUppercut())
+        Vector3 attackStartPos = transform.localPosition;
+        if (attackStartPos.z > 0)
         {
-            //_rbody.AddForce(Vector3.up * jumpHeight);
+            attackStartPos.z = 0;
+            transform.localPosition = attackStartPos;
         }
+
+
+        isDodging = false;
+
+    }
+
+    private void UpdateAttackCooldown()
+    {
+        //if (attackCooldown <= 0)
+        //{
+        //    attackCooldown = 0;
+        //    return;
+        //}
+        //attackCooldown -= Time.deltaTime;
+
 
     }
 
     private void DealEnemyDamage()
     {
+        if (GameController.instance.enemyGroup.currentEnemy == null) return;
         GameController.instance.enemyGroup.currentEnemy.TakeDamage(GameController.instance.hero.strength);
     }
 
@@ -85,19 +68,21 @@ public class Hero : Actor
         animator.SetTrigger("Jump");
         isJumping = true;
 
-        _rbody.velocity = Vector3.zero;
-        _rbody.AddForce(Vector3.up * jumpHeight);
-    }
-
-    public void Float()
-    {
-        _rbody.AddForce(Vector3.up * 200);
+        rbody.velocity = Vector3.zero;
+        rbody.AddForce(Vector3.up * jumpHeight);
     }
 
     public void Dodge()
     {
         animator.SetTrigger("Dodge");
         isDodging = true;
+
+        //Vector3 dodgeStartPos = transform.localPosition;
+        //dodgeStartPos.z = 0;
+        //transform.localPosition = dodgeStartPos;
+
+        //rbody.AddForce(transform.forward * 1500f);
+
     }
 
     public void MarkDodgeComplete()
@@ -108,30 +93,35 @@ public class Hero : Actor
 
     public void TakeDamage(float val)
     {
-        if (invincible) return;
-        if (isDodging == false)
+        if (isDodging) 
         {
-            currentHealth -= val;
-
-            if (currentHealth <= 0)
-            {
-                currentHealth = 0;
-                Die();
-            }
-            else
-            {
-                animator.SetTrigger("TakeDamage");
-            }
-
             //show the damage text effect
-            GameController.instance.damageTextEffect.ShowTextEffect("-" + val, middleOfCollider);
-
-            //update the meter to new health value
-            float newHealthValue = currentHealth / startingHealth;
-            healthMeter.meter.value = newHealthValue;
-
-            bloodFX.Play();
+            GameController.instance.damageTextEffect.ShowTextEffect("Dodged!", middleOfCollider);
+            return;
         }
+            
+
+        if (!invincible) currentHealth -= val;
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            Die();
+        }
+        else
+        {
+            animator.SetTrigger("TakeDamage");
+        }
+
+        //show the damage text effect
+        GameController.instance.damageTextEffect.ShowTextEffect("-" + val, middleOfCollider);
+
+        //update the meter to new health value
+        float newHealthValue = currentHealth / startingHealth;
+        healthMeter.meter.value = newHealthValue;
+
+        bloodFX.Play();
+
     }
 
     public void Die()
@@ -140,13 +130,29 @@ public class Hero : Actor
         animator.SetTrigger("Die");
     }
 
+    //handle collision w/ the ground.
 	private void OnCollisionEnter(Collision collision)
 	{
         if (collision.gameObject.tag == "Ground")
         {
-            //Debug.Log("Ground!");
-            animator.SetBool("isJumping", false);
+            if (isDodging) return;
+
+            animator.SetTrigger("LandOnGround");
             isJumping = false;
         }
 	}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("Attack collider activated");
+            attackCollider.enabled = false;
+
+            //do some damage
+            DealEnemyDamage();
+        }
+    }
+
+
 }

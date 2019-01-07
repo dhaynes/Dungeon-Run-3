@@ -15,37 +15,29 @@ public class Enemy : Actor
     public float blockPercentage = 0.1f;
 
     [Tooltip("Timer that shows how long until the enemy will open itself up to attack again.")]
-    public float blockCooldown = 0f;
-    public float maxBlockCooldown = 0f;
+    public float blockCooldown;
+    public float maxBlockCooldown;
 
-    public GameObject shield;
+    public BoxCollider attackCollider;
 
-    public bool isAttacking
-    {
-        get { return animator.GetBool("isAttacking"); }
-        private set { animator.SetBool("isAttacking", value); }
-    }
-
-    public bool isDead
-    {
-        get { return animator.GetBool("isDead"); }
-        private set { animator.SetBool("isDead", value); }
-    }
-
-    public bool isBlocking
-    {
-        get { return animator.GetBool("isBlocking"); }
-        private set { animator.SetBool("isBlocking", value); shield.SetActive(value); }
-    }
-
-    private Rigidbody _rbody;
     private Hero _hero;
+
+    [Space(15)]
+    public float realignmentSpeed = 0.02f;
+    public float realignmentCooldown = 1f;
 
     void Start()
 	{
         //attach anim helper script to mesh
-        mesh.AddComponent<AnimEventHelper>();
+        if (!mesh.GetComponent<AnimEventHelper>())
+        {
+            mesh.AddComponent<AnimEventHelper>();
+        }
+
         _hero = GameController.instance.hero;
+
+        attackCollider.gameObject.GetComponent<MeshRenderer>().enabled = false;
+
     }
 
     void Update()
@@ -60,35 +52,51 @@ public class Enemy : Actor
             }
         }
 
+        UpdateAlignment();
+
     }
 
-    public void Reset()
-	{
-        healthMeter = GameController.instance.enemyHealthMeter;
-        healthMeter.meter.value = 1;
-        currentHealth = startingHealth;
-
-        _rbody = this.gameObject.GetComponent<Rigidbody>();
-        _rbody.sleepThreshold = 0;
-    }
-
-    public void MakeEntrance()
+    public void UpdateAlignment()
     {
-        _rbody.WakeUp();
-        healthMeter.Show();
+        if (realignmentCooldown > 0)
+        {
+            realignmentCooldown -= Time.deltaTime;
+            return;
+        }
+        else
+        {
+            realignmentCooldown = 0;
+        }
 
-        animator.SetTrigger("Enter");
+        Vector3 pos = transform.localPosition;
+        float distance = Vector3.Distance(pos, Vector3.zero);
 
-        //clear the dodge and attacking flags
-        ClearFlags();
+        if (pos.z < -realignmentSpeed) //if it has been pushed forwards...
+        {
+            pos.z += realignmentSpeed;
+        }
+        else if (pos.z > realignmentSpeed) //if it's towards the back...
+        {
+            pos.z -= realignmentSpeed;
+        }
+        else if (pos.z >= -realignmentSpeed && pos.z <= realignmentSpeed) // if it's mostly at rest in the middle...
+        {
+            pos.z = 0;
+        }
+
+        transform.localPosition = pos;
+
     }
 
     public void TakeDamage(float damageAmt)
     {
+        if (isDead) return;
 
-        if (invincible) return;
-        if (animator.GetBool("isDead")) return;
-        if (animator.GetBool("isAttacking")) return;
+        if (isAttacking) 
+        {
+            GameController.instance.damageTextEffect.ShowTextEffect("Missed!", middleOfCollider);
+            return;
+        }
 
         //evaluate whether or not this should trigger a block. Once an enemy blocks, it will continue blocking until it attacks again.
         if (AttackBlocked())
@@ -104,7 +112,7 @@ public class Enemy : Actor
             return;
         }
 
-        currentHealth -= damageAmt;
+        if (!invincible) currentHealth -= damageAmt;
 
         if (currentHealth <= 0)
         {
@@ -121,6 +129,9 @@ public class Enemy : Actor
             animator.SetTrigger("TakeDamage");
 
             GameController.instance.damageTextEffect.ShowTextEffect("-" + damageAmt, middleOfCollider);
+
+            //knockback effect - only for uppercuts or power attacks
+            //rbody.AddForce(transform.forward * 300f);
         }
 
         bloodFX.Play();
@@ -180,6 +191,10 @@ public class Enemy : Actor
         gameObject.SetActive(false);
     }
 
+
+
+
+    //Make an attempt to initiate an attack.
     //this is called from an anim event on the enemy controller's idle
     public void TryToAttack()
     {
@@ -192,7 +207,8 @@ public class Enemy : Actor
     private void PrepareToAttack()
     {
         animator.SetTrigger("PrepareToAttack");
-        Invoke("Attack", attackAnticipationDuration);
+
+        attackCollider.enabled = true;
 
         isAttacking = true;
         isBlocking = false;
@@ -200,22 +216,29 @@ public class Enemy : Actor
 
     private void Attack()
     {
-        animator.SetTrigger("Attack");
+        //turn on the attack collider. Otherwise it won't register a successful attack.
 
+        animator.SetTrigger("Attack");
     }
 
-
-
-    private void EvaluateAttackSuccess()
+    private void DealHeroDamage()
     {
         _hero.TakeDamage(strength);
-        ClearFlags();
-    }
 
-    //this is called from an anim event
-    public void ClearFlags()
-    {
         isAttacking = false;
         isBlocking = false;
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Debug.Log("Enemy attack collider activated");
+            attackCollider.enabled = false;
+
+            //do some damage
+            DealHeroDamage();
+        }
     }
 }

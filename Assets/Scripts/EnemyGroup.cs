@@ -46,6 +46,7 @@ public class EnemyGroup : MonoBehaviour
         //clone all enemies
         for (int i = 0; i < enemiesToLoad.Count; i++)
         {
+            //create new enemies. They won't be shown until NextEnemy() is called.
             Enemy e = enemiesToLoad[i];
             Enemy newEnemy = Instantiate(Resources.Load<Enemy>("Enemies/" + e.gameObject.name));
             enemiesLoaded.Add(newEnemy);
@@ -54,7 +55,6 @@ public class EnemyGroup : MonoBehaviour
             newEnemy.transform.localRotation = Quaternion.identity;
             newEnemy.gameObject.SetActive(false);
         }
-
 
         NextEnemy();
     }
@@ -68,12 +68,13 @@ public class EnemyGroup : MonoBehaviour
             return;
         }
 
-        Enemy currentEnemy = enemiesLoaded[currentEnemyIndex];
-        currentEnemy.gameObject.SetActive(true);
-        currentEnemy.Reset();
-        currentEnemy.MakeEntrance();
+        //grab the next enemy, and initialize it.
+        Enemy newEnemy = enemiesLoaded[currentEnemyIndex];
+        newEnemy.healthMeter = GameController.instance.enemyHealthMeter;
+        newEnemy.gameObject.SetActive(true);
+        newEnemy.MakeEntrance();
 
-        this.currentEnemy = currentEnemy;
+        this.currentEnemy = newEnemy;
     }
 
     private void EnemyGroupDefeated()

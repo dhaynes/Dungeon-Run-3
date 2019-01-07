@@ -11,21 +11,15 @@ public class ActionButton : MonoBehaviour
 
     [Space]
     public TextMeshProUGUI Label;
-    public Slider Meter;
     public StaminaMeter staminaMeter;
 
     [Space]
-    public float MaxCharge;
-    public float CurrentCharge;
     public float Cost;
 
     [Space]
     public float ChargeSpeed = 1f;
     public float cooldownBetweenClicks = 0.5f;
     public bool coolingDown = false;
-
-
-    private float _meterFillAmt;
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +30,11 @@ public class ActionButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //CheckInput();
     }
+
+
+
 
     public void TriggerAction()
     {
@@ -46,37 +43,36 @@ public class ActionButton : MonoBehaviour
 
         GameController.instance.staminaMeter.stamina -= Cost;
 
-        InitiateSuccessfulAction();
-
-    }
-
-
-
-    private void InitiateSuccessfulAction()
-    {
         switch (actionType)
         {
-            case ActionType.Jump:
-                DoJump();
-                break;
-
+            case ActionType.Attack:
+                {
+                    DoAttack();
+                    break;
+                }
             case ActionType.Dodge:
-                DoDodge();
-                break;
-
-            case ActionType.Magic:
-                DoAttack();
-                break;
-
-            default: //"Attack"
-                DoAttack();
-                break;
+                {
+                    DoDodge();
+                    break;
+                }
+            case ActionType.Jump:
+                {
+                    DoJump();
+                    break;
+                }
+            default:
+                {
+                    DoAttack();
+                    break;
+                }
         }
 
+        
         //apply cooldown
         coolingDown = true;
 
         Invoke("EndCooldown", cooldownBetweenClicks);
+
     }
 
     private void EndCooldown()
@@ -84,17 +80,17 @@ public class ActionButton : MonoBehaviour
         coolingDown = false;
     }
 
-    private void DoAttack()
+    public void DoAttack()
     {
         GameController.instance.hero.Attack();
     }
 
-    private void DoJump()
+    public void DoJump()
     {
         GameController.instance.hero.Jump();
     }
 
-    private void DoDodge()
+    public void DoDodge()
     {
         GameController.instance.hero.Dodge();
     }

@@ -9,6 +9,7 @@ public class StaminaMeter : MonoBehaviour
     public float maxStamina = 100f;
     public float stamina = 0f;
     public float chargeSpeed;
+    public bool infiniteStamina;
 
     // Start is called before the first frame update
     void Start()
@@ -20,7 +21,15 @@ public class StaminaMeter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        stamina += Time.deltaTime * chargeSpeed;
+        if (infiniteStamina)
+        {
+            stamina = maxStamina;
+        }
+        else
+        {
+            stamina += Time.deltaTime * chargeSpeed;
+            if (stamina > maxStamina) stamina = maxStamina;
+        }
 
         UpdateMeter();
     }
