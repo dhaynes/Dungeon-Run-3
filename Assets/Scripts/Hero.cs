@@ -7,13 +7,13 @@ public class Hero : Actor
     [Space(15)]
     public int jumpHeight = 740;
     public float forwardAttackForce = 650f;
-    public BoxCollider attackCollider;
+    //public BoxCollider attackCollider;
 
 
     void Start()
 	{
         healthMeter = GameController.instance.playerHealthMeter;
-        attackCollider.gameObject.GetComponent<MeshRenderer>().enabled = false;
+        //attackCollider.gameObject.GetComponent<MeshRenderer>().enabled = false;
     }
 
     void Update()
@@ -24,7 +24,7 @@ public class Hero : Actor
     public void Attack()
     {
         //enable the attack collider
-        attackCollider.enabled = true;
+        //attackCollider.enabled = true;
 
         animator.SetTrigger("Attack");
 
@@ -146,7 +146,7 @@ public class Hero : Actor
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("Attack collider activated");
-            attackCollider.enabled = false;
+            //attackCollider.enabled = false;
 
             //do some damage
             DealEnemyDamage();
